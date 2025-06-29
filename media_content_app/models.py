@@ -1,17 +1,14 @@
 from django.db import models
 from django.conf import settings
 
-
 class Video(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    video_file = models.FileField(upload_to='videos/originals/')  # Nur dieses Feld wird manuell hochgeladen
-    thumbnail = models.FileField(upload_to='thumbnails/')
+    video_file = models.FileField(upload_to='videos/')
+    thumbnail = models.FileField(upload_to='thumbnails/', null=True, blank=True)
     description = models.TextField(blank=True)
     genre = models.CharField(max_length=50, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    # Automatisch erstellte Versionen
     video_1080p = models.FileField(upload_to='videos/1080p/', null=True, blank=True)
     video_720p = models.FileField(upload_to='videos/720p/', null=True, blank=True)
     video_360p = models.FileField(upload_to='videos/360p/', null=True, blank=True)
@@ -19,12 +16,11 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
-
-
+    
 class VideoProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    last_position = models.FloatField(default=0.0)  # in Sekunden z. B.
+    last_position = models.FloatField(default=0.0)  
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
