@@ -1,10 +1,12 @@
 from django.db import models
 from django.conf import settings
+from user_auth_app.models import User
 
 class Video(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) kann nach test wieder rein
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL) # zum testen muss wieder raus 
     title = models.CharField(max_length=255)
-    video_file = models.FileField(upload_to='videos/')
+    video_file = models.FileField(upload_to='videos/originals/')
     thumbnail = models.FileField(upload_to='thumbnails/', null=True, blank=True)
     description = models.TextField(blank=True)
     genre = models.CharField(max_length=50, blank=True)
@@ -17,6 +19,9 @@ class Video(models.Model):
     def __str__(self):
         return self.title
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
 class VideoProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
@@ -24,4 +29,4 @@ class VideoProgress(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('user', 'video')  # Jeder User darf nur einen Fortschritt pro Video haben
+        unique_together = ('user', 'video')  # Jeder User darf nur einen Fortschritt pro Video haben.

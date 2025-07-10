@@ -136,6 +136,7 @@ CORS_ALLOW_HEADERS = [
 'x-csrftoken',
 ]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True  # zum Testen, später gezielt konfigurieren oder zeile wieder löschen!
 
 ROOT_URLCONF = 'core.urls'
 

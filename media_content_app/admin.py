@@ -7,7 +7,7 @@ import django_rq
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
     readonly_fields = ('video_1080p', 'video_720p', 'video_360p', 'video_120p')
-    fields = ('title', 'video_file', 'description', 'thumbnail', 'genre')
+    fields = ('title', 'video_file', 'description', 'genre')
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
